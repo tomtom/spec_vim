@@ -78,6 +78,9 @@ Contents~
         spec#Replay .................... |spec#Replay()|
         spec#speckiller#Reset .......... |spec#speckiller#Reset()|
         spec#speckiller#OptionSets ..... |spec#speckiller#OptionSets()|
+        should#throw#Something ......... |should#throw#Something()|
+        should#throw#Exception ......... |should#throw#Exception()|
+        should#maintain#WindowLayout ... |should#maintain#WindowLayout()|
         should#be#Type ................. |should#be#Type()|
         should#be#Number ............... |should#be#Number()|
         should#be#String ............... |should#be#String()|
@@ -97,12 +100,9 @@ Contents~
         should#be#Existent ............. |should#be#Existent()|
         should#be#Like ................. |should#be#Like()|
         should#be#Unlike ............... |should#be#Unlike()|
+        should#test#Init ............... |should#test#Init()|
         should#finish#InSecs ........... |should#finish#InSecs()|
         should#finish#InMicroSecs ...... |should#finish#InMicroSecs()|
-        should#maintain#WindowLayout ... |should#maintain#WindowLayout()|
-        should#test#Init ............... |should#test#Init()|
-        should#throw#Something ......... |should#throw#Something()|
-        should#throw#Exception ......... |should#throw#Exception()|
         should#yield#Buffer ............ |should#yield#Buffer()|
         should#yield#SqueezedBuffer .... |should#yield#SqueezedBuffer()|
 
@@ -281,8 +281,29 @@ spec#speckiller#OptionSets(options, i)
 
 
 ========================================================================
-autoload/should/be.vim~
+autoload/should/throw.vim~
 
+                                                    *should#throw#Something()*
+should#throw#Something(expr)
+    Return the exception when evaluating expr or an empty string if 
+    nothing was thrown.
+
+                                                    *should#throw#Exception()*
+should#throw#Exception(expr, expected)
+    Check if the exception throws when evaluating expr matches the 
+    expected |regexp|.
+
+
+========================================================================
+autoload/should/maintain.vim~
+
+                                                    *should#maintain#WindowLayout()*
+should#maintain#WindowLayout(layout)
+    Require tlib.
+
+
+========================================================================
+autoload/should/be.vim~
 
 should#be#A(expr, type)
     Test if expr is of type, where type can be:
@@ -358,24 +379,6 @@ should#be#Unlike(string, rx, ?case='')
 
 
 ========================================================================
-autoload/should/finish.vim~
-
-                                                    *should#finish#InSecs()*
-should#finish#InSecs(expr, secs)
-
-                                                    *should#finish#InMicroSecs()*
-should#finish#InMicroSecs(expr, msecs)
-
-
-========================================================================
-autoload/should/maintain.vim~
-
-                                                    *should#maintain#WindowLayout()*
-should#maintain#WindowLayout(layout)
-    Require tlib.
-
-
-========================================================================
 autoload/should/test.vim~
 
                                                     *should#test#Init()*
@@ -383,17 +386,13 @@ should#test#Init()
 
 
 ========================================================================
-autoload/should/throw.vim~
+autoload/should/finish.vim~
 
-                                                    *should#throw#Something()*
-should#throw#Something(expr)
-    Return the exception when evaluating expr or an empty string if 
-    nothing was thrown.
+                                                    *should#finish#InSecs()*
+should#finish#InSecs(expr, secs)
 
-                                                    *should#throw#Exception()*
-should#throw#Exception(expr, expected)
-    Check if the exception throws when evaluating expr matches the 
-    expected |regexp|.
+                                                    *should#finish#InMicroSecs()*
+should#finish#InMicroSecs(expr, msecs)
 
 
 ========================================================================

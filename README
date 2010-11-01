@@ -1,5 +1,3 @@
-*spec.txt*          Behaviour-driven design (BDD) for vim scripts
-
 This plugin provides a small set of commands to facilitate 
 behaviour-driven design of vim plugins. It basically consists of two 
 parts:
