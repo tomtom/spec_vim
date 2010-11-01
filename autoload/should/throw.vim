@@ -3,11 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-21.
-" @Last Change: 2010-03-16.
-" @Revision:    0.0.22
-
-let s:save_cpo = &cpo
-set cpo&vim
+" @Last Change: 2010-09-17.
+" @Revision:    0.0.30
 
 
 " Return the exception when evaluating expr or an empty string if 
@@ -50,6 +47,3 @@ fun! should#throw#Exception(expr, expected)
     return rv
 endf
 
-
-let &cpo = s:save_cpo
-unlet s:save_cpo

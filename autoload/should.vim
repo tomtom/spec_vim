@@ -3,13 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-21.
-" @Last Change: 2010-01-03.
-" @Revision:    0.0.49
-
-let s:save_cpo = &cpo
-set cpo&vim
-" call tlog#Log('Load: '. expand('<sfile>')) " vimtlib-sfile
-
+" @Last Change: 2010-09-17.
+" @Revision:    0.0.53
 
 
 " :nodoc:
@@ -64,6 +59,3 @@ function! should#__Require(what) "{{{3
     endif
 endf
 
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
