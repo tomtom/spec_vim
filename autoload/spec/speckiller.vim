@@ -3,11 +3,12 @@
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-03-01.
 " @Last Change: 2012-09-22.
-" @Revision:    128
+" @Revision:    130
 
-let s:save_cpo = &cpo
-set cpo&vim
 
+if !exists('g:spec#speckiller#options_file')
+    let g:spec#speckiller#options_file = expand('<sfile>:p:h') .'/options_default_'. hostname() .'.dat'   "{{{2
+endif
 
 function! spec#speckiller#SaveOptions(options) "{{{3
     " TLogVAR a:options
@@ -54,11 +55,6 @@ function! spec#speckiller#OptionSets(options, i) "{{{3
 endf
 
 
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-
-let s:option_file = expand('<sfile>:p:h') .'/options_default_'. hostname() .'.dat'
 let s:option_blacklist = [
             \ 'all',
             \ 'compatible',
@@ -74,8 +70,8 @@ let s:option_blacklist = [
 
 function! s:OptionsDefault(...) "{{{3
 	if !exists('s:option_default')
-		if filereadable(s:option_file)
-			exec 'let s:option_default = '. join(readfile(s:option_file, 'b'), "\n")
+		if filereadable(g:spec#speckiller#options_file)
+			exec 'let s:option_default = '. join(readfile(g:spec#speckiller#options_file, 'b'), "\n")
 		else
 			let default = '&'. (a:0 >= 1 ? a:1 : 'vim')
 			" From: Andy Wokula
@@ -104,7 +100,7 @@ function! s:OptionsDefault(...) "{{{3
 					exec 'let '. prefix . opt .' = val'
 				endif
 			endfor
-			call writefile([string(s:option_default)], s:option_file, 'b')
+			call writefile([string(s:option_default)], g:spec#speckiller#options_file, 'b')
 		endif
 	endif
 	return s:option_default
