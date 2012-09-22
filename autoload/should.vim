@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-21.
-" @Last Change: 2010-09-17.
-" @Revision:    0.0.53
+" @Last Change: 2012-09-22.
+" @Revision:    0.0.55
 
 
 " :nodoc:
@@ -45,6 +45,7 @@ endf
 
 " :nodoc:
 function! should#__Eval(expr) "{{{3
+    " TLogVAR a:expr
     if a:expr[0:0] == ':'
         exec a:expr
     else

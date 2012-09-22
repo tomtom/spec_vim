@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-22.
-" @Last Change: 2010-09-17.
-" @Revision:    0.0.381
+" @Last Change: 2012-09-22.
+" @Revision:    0.0.407
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -149,8 +149,27 @@ function! spec#__Begin(args, sfile) "{{{3
         throw 'Spec: Run the spec with the :Spec command'
     endif
     let s:spec_args = s:ParseArgs(a:args, a:sfile)
+    " echom "DBG spec_args" string(get(s:spec_args, 'options', []))
     let s:spec_vars = keys(g:)
+    if has_key(s:spec_args, 'options')
+        if s:spec_perm < 0
+            let s:spec_perm = 0
+        endif
+        let s:spec_option_sets += s:spec_args.options
+        call spec#speckiller#OptionSets(s:spec_option_sets, s:spec_perm)
+    endif
     call spec#__Comment('')
+endf
+
+
+" :nodoc:
+function! s:ParseArgs(args, sfile) "{{{3
+    let s:spec_msg = get(a:args, 'title', '')
+    let s:spec_context = get(a:args, 'sfile', a:sfile)
+    if !has_key(a:args, 'sfile')
+        let a:args['sfile'] = s:spec_context
+    endif
+    return a:args
 endf
 
 
@@ -166,7 +185,7 @@ function! spec#__End(args) "{{{3
 
     if exists('s:spec_vars')
         let vars = keys(g:)
-        call filter(vars, 'index(s:spec_vars, v:val) == -1')
+        call filter(vars, 'v:val == "^_" && index(s:spec_vars, v:val) == -1')
         " TLogVAR vars
         call map(vars, '"g:". v:val')
         " TLogVAR vars
@@ -198,7 +217,7 @@ function! s:MaybeOpenScratch() "{{{3
     let scratch = get(s:spec_args, 'scratch', '')
     if !empty(scratch)
         if type(scratch) == 1
-            let scratch_args = [scratch]
+            let scratch_args = [scratch, fnamemodify(scratch, ':e')]
         else
             let scratch_args = scratch
         endif
@@ -337,21 +356,21 @@ function! spec#Include(filename, top_spec) "{{{3
     call s:PushFile(filename0)
     let s:spec_files[filename0] = readfile(a:filename)
     let source = 'source '. fnameescape(a:filename)
-    let s:spec_perm = -1
     let qfl_size = len(getqflist())
-    let options = g:spec_option_sets
-    " TLogVAR options
-    while qfl_size == len(getqflist()) && (s:spec_perm < 0 || (a:top_spec && spec#speckiller#OptionSets(options, s:spec_perm)))
+    let s:spec_perm = -1
+    let s:spec_option_sets = []
+    while qfl_size == len(getqflist()) && (s:spec_perm < 0 || (a:top_spec && spec#speckiller#OptionSets(s:spec_option_sets, s:spec_perm)))
         call s:Log(0, 'Spec ['. (s:spec_perm  + 1) .']: '. a:filename)
         let s:should_counts[filename0] = 0
+        let s:spec_option_sets = copy(g:spec_option_sets)
         try
             exec source
-            let options1 = get(s:spec_args, 'options', [])
-            " TLogVAR options1
-            if !empty(options1) && s:spec_perm < 0
-                let options = extend(deepcopy(options), options1)
-                " TLogVAR options
-            endif
+            " let options1 = get(s:spec_args, 'options', [])
+            " " TLogVAR options1
+            " if !empty(options1) && s:spec_perm < 0
+            "     let s:spec_option_sets = extend(deepcopy(s:spec_option_sets), options1)
+            "     " TLogVAR s:spec_option_sets
+            " endif
         catch
             let msg = v:exception .': '. v:throwpoint
             call spec#__AddQFL(source, msg)
@@ -396,17 +415,6 @@ function! s:CanonicalFilename(filename) "{{{3
 endf
 
 
-" :nodoc:
-function! s:ParseArgs(args, sfile) "{{{3
-    let s:spec_msg = get(a:args, 'title', '')
-    let s:spec_context = get(a:args, 'sfile', a:sfile)
-    if !has_key(a:args, 'sfile')
-        let a:args['sfile'] = s:spec_context
-    endif
-    return a:args
-endf
-
-
 " Evaluate an expression in the context of a script.
 " Requires a call to |specInit()|.
 fun! spec#Val(expr)
@@ -420,7 +428,7 @@ fun! spec#Val(expr)
 endf
 
 
-" :display: spec#ScratchBuffer(?filename="", ?filetype="") "{{{3
+" :display: spec#OpenScratch(?filename="", ?filetype="") "{{{3
 " Open the spec scratch buffer.
 function! spec#OpenScratch(...) "{{{3
     if bufname('%') != '__SPEC_SCRATCH_BUFFER__'
@@ -441,7 +449,7 @@ function! spec#OpenScratch(...) "{{{3
         endif
         if a:0 >= 2
             if !empty(a:2)
-                exec 'set ft='. a:a2
+                exec 'set ft='. a:2
             endif
         endif
     endif

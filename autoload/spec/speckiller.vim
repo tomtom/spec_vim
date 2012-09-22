@@ -2,14 +2,14 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-03-01.
-" @Last Change: 2009-03-14.
-" @Revision:    124
+" @Last Change: 2012-09-22.
+" @Revision:    128
 
 let s:save_cpo = &cpo
 set cpo&vim
 
 
-function! s:Init(options) "{{{3
+function! spec#speckiller#SaveOptions(options) "{{{3
     " TLogVAR a:options
     let s:options_initial = {}
     for o in keys(a:options)
@@ -45,7 +45,7 @@ function! spec#speckiller#OptionSets(options, i) "{{{3
         unlet options
         let options = options0
     endif
-    call s:Init(options)
+    call spec#speckiller#SaveOptions(options)
     for [name, value] in items(options)
         exec 'let '. name .' = value'
         " TLog name
@@ -65,6 +65,7 @@ let s:option_blacklist = [
             \ 'guifont',
             \ 'modified',
             \ 'termcap',
+            \ 'termencoding',
             \ 'term',
             \ 'ttytype',
             \ 'vim',
