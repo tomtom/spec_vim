@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-22.
-" @Last Change: 2010-02-27.
-" @Revision:    68
+" @Last Change: 2012-09-22.
+" @Revision:    70
 " GetLatestVimScripts: 2580 0 :AutoInstall: spec.vim
 
 if &cp || exists("loaded_spec")
@@ -87,9 +87,9 @@ command! -nargs=? -complete=file -bang Spec
 "               order to get the usual environment.
 " 
 " NOTES:
-" Any global variables that were not defined at the time of the last 
-" invocation of |:SpecBegin| are considered temporary variables and will 
-" be removed.
+" Any global variables (whose name begins with an underscore) that were 
+" not defined at the time of the last invocation of |:SpecBegin| are 
+" considered temporary variables and will be removed.
 "
 " A specification file *should* ;-) include exactly one :SpecBegin 
 " command.
@@ -108,24 +108,3 @@ endf
 let &cpo = s:save_cpo
 unlet s:save_cpo
 finish
-
-TODO: SpecInclude spec.file
-TODO: Delete spec commands when done.
-
-
-POSSIBLE ENHANCEMENTS:
-- log to file???
-- Pass, Fail (current spec)
-- remote testing (maybe we don't need this if the use of feedkeys() is 
-sufficient for most interactive tests)
-
-
-CHANGES:
-0.1
-- Initial release
-
-0.2
-- Display a message after having run all specs
-- Raise an error when :SpecBegin is not called in a spec context (i.e. 
-via the :Spec command)
-
