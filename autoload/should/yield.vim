@@ -3,8 +3,8 @@
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
 " @Created:     2009-02-21.
-" @Last Change: 2009-02-28.
-" @Revision:    0.0.30
+" @Last Change: 2012-09-22.
+" @Revision:    0.0.40
 
 let s:save_cpo = &cpo
 set cpo&vim
@@ -13,11 +13,24 @@ set cpo&vim
 " Compare the current buffer with the contents of filename after 
 " |:exe|cuting expr.
 " Useful for testing normal commands, mappings etc.
-function! should#yield#Buffer(expr, filename) "{{{3
-    " TLogVAR a:expr, a:filename
-    call should#__Eval(a:expr)
+function! should#yield#Buffer(...) "{{{3
+    if a:0 == 1
+        let expr = ''
+        let filename = a:1
+    elseif a:0 == 2
+        let [expr, filename] = a:000
+    else
+        throw "spec: should#yield#Buffer: Must provide either one or two arguments"
+    endif
+    " TLogVAR &selection
+    " TLogVAR expr, filename
+    " TLogVAR getline(1, '$')
+    if !empty(expr)
+        call should#__Eval(expr)
+    endif
     let buf = getline(1, '$')
-    let file = readfile(a:filename)
+    let file = readfile(filename)
+    " TLogVAR buf, file
     return s:CompareLines(buf, file)
 endf
 
