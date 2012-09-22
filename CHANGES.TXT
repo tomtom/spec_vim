@@ -1,0 +1,9 @@
+CHANGES:
+0.1
+- Initial release
+
+0.2
+- Display a message after having run all specs
+- Raise an error when :SpecBegin is not called in a spec context (i.e. 
+via the :Spec command)
+
