@@ -1,9 +1,0 @@
-{
-  "name" : "spec",
-  "version" : "dev",
-  "author" : "Tom Link <micathom at gmail com>",
-  "maintainer" : "Tom Link <micathom at gmail com>",
-  "repository" : {"type": "git", "url": "git://github.com/tomtom/spec_vim.git"},
-  "dependencies" : {},
-  "description" : "Behaviour-driven design: easy on the eye specifications of VIM scripts"
-}
